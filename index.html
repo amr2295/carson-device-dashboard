@@ -8,244 +8,112 @@
 <style>
 :root{--bg:#0f1117;--surface:#1a1d27;--card:#21253a;--border:#2e3350;--accent:#4f8ef7;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--purple:#a855f7;--text:#e2e8f0;--muted:#8892a4;--header:#c5cfe0}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
 .top-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between}
 .logo{font-size:20px;font-weight:700;color:var(--accent)}.logo span{color:var(--text)}
-.timestamp{font-size:12px;color:var(--muted)}
-.container{max-width:1400px;margin:0 auto;padding:24px 32px}
+.ts{font-size:12px;color:var(--muted)}
+.wrap{max-width:1400px;margin:0 auto;padding:24px 32px}
 h2{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px}
-.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:32px}
-.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;position:relative;overflow:hidden}
-.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0}
-.stat-card.total::before{background:var(--accent)}.stat-card.online::before{background:var(--green)}
-.stat-card.offline::before{background:var(--red)}.stat-card.battery::before{background:var(--yellow)}
-.stat-card.buildings::before{background:var(--purple)}
-.stat-label{font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:500}
-.stat-value{font-size:36px;font-weight:700;line-height:1}
-.stat-card.total .stat-value{color:var(--accent)}.stat-card.online .stat-value{color:var(--green)}
-.stat-card.offline .stat-value{color:var(--red)}.stat-card.battery .stat-value{color:var(--yellow)}
-.stat-card.buildings .stat-value{color:var(--purple)}
-.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
-.chart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px}
-.chart-card h2{margin-bottom:16px}
-.chart-container{position:relative;height:220px}
-.section{margin-bottom:32px}
-.table-wrapper{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
-.table-toolbar{padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);flex-wrap:wrap}
-.search-box{flex:1;min-width:200px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text);font-size:14px;outline:none}
-.search-box:focus{border-color:var(--accent)}
-.filter-select{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;cursor:pointer}
-.tab-pills{display:flex;gap:4px}
-.pill{padding:7px 16px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all 0.15s}
+.sg{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:32px}
+.sc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;position:relative;overflow:hidden}
+.sc::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0}
+.sc.t::before{background:var(--accent)}.sc.o::before{background:var(--green)}.sc.f::before{background:var(--red)}.sc.b::before{background:var(--yellow)}.sc.u::before{background:var(--purple)}
+.sl{font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:500}
+.sv{font-size:36px;font-weight:700;line-height:1}
+.sc.t .sv{color:var(--accent)}.sc.o .sv{color:var(--green)}.sc.f .sv{color:var(--red)}.sc.b .sv{color:var(--yellow)}.sc.u .sv{color:var(--purple)}
+.cr{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+.cc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px}
+.cc h2{margin-bottom:16px}
+.ch{position:relative;height:220px}
+.sec{margin-bottom:32px}
+.tw{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.tb{padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.sb{flex:1;min-width:200px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text);font-size:14px;outline:none}
+.sb:focus{border-color:var(--accent)}
+.fs{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;cursor:pointer}
+.pills{display:flex;gap:4px}
+.pill{padding:7px 16px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted)}
 .pill.active{background:var(--accent);border-color:var(--accent);color:white}
 table{width:100%;border-collapse:collapse;font-size:13px}
 thead th{background:var(--surface);padding:10px 14px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none}
 thead th:hover{color:var(--text)}
-tbody tr{border-bottom:1px solid var(--border);transition:background 0.1s}
+tbody tr{border-bottom:1px solid var(--border)}
 tbody tr:last-child{border-bottom:none}
-tbody tr:hover{background:rgba(79,142,247,0.05)}
+tbody tr:hover{background:rgba(79,142,247,.05)}
 tbody td{padding:10px 14px;white-space:nowrap}
 .badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
-.badge-online{background:rgba(34,197,94,.15);color:var(--green)}.badge-offline{background:rgba(239,68,68,.15);color:var(--red)}
-.badge-door{background:rgba(79,142,247,.15);color:var(--accent)}.badge-camera{background:rgba(168,85,247,.15);color:var(--purple)}
-.badge-low{background:rgba(245,158,11,.15);color:var(--yellow)}
+.bon{background:rgba(34,197,94,.15);color:var(--green)}.bof{background:rgba(239,68,68,.15);color:var(--red)}
+.bd{background:rgba(79,142,247,.15);color:var(--accent)}.bca{background:rgba(168,85,247,.15);color:var(--purple)}
+.bb{background:rgba(245,158,11,.15);color:var(--yellow)}
 .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
-.dot-green{background:var(--green);box-shadow:0 0 6px var(--green)}.dot-red{background:var(--red)}
-.pager{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-top:1px solid var(--border);font-size:13px;color:var(--muted)}
-.pager-btns{display:flex;gap:6px}
-.pager-btn{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:5px 12px;color:var(--text);cursor:pointer;font-size:13px}
-.pager-btn:hover{border-color:var(--accent);color:var(--accent)}
-.pager-btn:disabled{opacity:.4;cursor:not-allowed}
-.provider-pill{font-size:11px;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 7px;color:var(--header)}
-.bool-true{color:var(--green);font-weight:600}.bool-false{color:var(--muted)}
-.offline-row{background:rgba(239,68,68,.04)}.battery-row{background:rgba(245,158,11,.04)}
-@media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)}.charts-row{grid-template-columns:1fr}.container{padding:16px}}
+.dg{background:var(--green);box-shadow:0 0 6px var(--green)}
+.pg{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-top:1px solid var(--border);font-size:13px;color:var(--muted)}
+.pgs{display:flex;gap:6px}
+.pb{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:5px 12px;color:var(--text);cursor:pointer;font-size:13px}
+.pb:hover{border-color:var(--accent);color:var(--accent)}
+.pb:disabled{opacity:.4;cursor:not-allowed}
+.pp{font-size:11px;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 7px;color:var(--header)}
+.bt{color:var(--green);font-weight:600}.bf{color:var(--muted)}
+.or{background:rgba(239,68,68,.04)}.btr{background:rgba(245,158,11,.04)}
+@media(max-width:900px){.sg{grid-template-columns:repeat(2,1fr)}.cr{grid-template-columns:1fr}.wrap{padding:16px}}
 </style>
 </head>
 <body>
-<div class="top-bar">
-  <div class="logo">Carson<span> Device Status</span></div>
-  <div class="timestamp" id="last-updated"></div>
+<div class="top-bar"><div class="logo">Carson<span> Device Status</span></div><div class="ts" id="ts"></div></div>
+<div class="wrap">
+<div style="margin-bottom:20px;margin-top:8px"><h2>Overview</h2>
+<div class="sg">
+<div class="sc t"><div class="sl">Total Devices</div><div class="sv" id="s0">-</div></div>
+<div class="sc o"><div class="sl">Online</div><div class="sv" id="s1">-</div></div>
+<div class="sc f"><div class="sl">Offline</div><div class="sv" id="s2">-</div></div>
+<div class="sc b"><div class="sl">Low Battery</div><div class="sv" id="s3">-</div></div>
+<div class="sc u"><div class="sl">Buildings</div><div class="sv" id="s4">-</div></div>
+</div></div>
+<div class="cr">
+<div class="cc"><h2>By Device Type</h2><div class="ch"><canvas id="tc"></canvas></div></div>
+<div class="cc"><h2>By Provider</h2><div class="ch"><canvas id="pcc"></canvas></div></div>
 </div>
-<div class="container">
-  <div style="margin-bottom:20px;margin-top:8px">
-    <h2>Overview</h2>
-    <div class="stats-grid">
-      <div class="stat-card total"><div class="stat-label">Total Devices</div><div class="stat-value" id="s-total">—</div></div>
-      <div class="stat-card online"><div class="stat-label">Online</div><div class="stat-value" id="s-online">—</div></div>
-      <div class="stat-card offline"><div class="stat-label">Offline</div><div class="stat-value" id="s-offline">—</div></div>
-      <div class="stat-card battery"><div class="stat-label">Low Battery</div><div class="stat-value" id="s-battery">—</div></div>
-      <div class="stat-card buildings"><div class="stat-label">Buildings</div><div class="stat-value" id="s-buildings">—</div></div>
-    </div>
-  </div>
-  <div class="charts-row">
-    <div class="chart-card"><h2>By Device Type</h2><div class="chart-container"><canvas id="typeChart"></canvas></div></div>
-    <div class="chart-card"><h2>By Provider</h2><div class="chart-container"><canvas id="providerChart"></canvas></div></div>
-  </div>
-  <div class="section">
-    <h2>Device Table</h2>
-    <div class="table-wrapper">
-      <div class="table-toolbar">
-        <div class="tab-pills">
-          <button class="pill active" id="pill-buildings" onclick="showView('buildings',this)">Buildings</button>
-          <button class="pill" id="pill-devices" onclick="showView('devices',this)">All Devices</button>
-        </div>
-        <input class="search-box" type="search" id="searchBox" placeholder="Search buildings, devices, providers…" oninput="applyFilters()">
-        <select class="filter-select" id="typeFilter" onchange="applyFilters()" style="display:none">
-          <option value="">All Types</option><option value="door">Doors</option><option value="camera">Cameras</option>
-        </select>
-        <select class="filter-select" id="statusFilter" onchange="applyFilters()">
-          <option value="">All Status</option><option value="online">Online</option><option value="offline">Offline</option><option value="low_battery">Low Battery</option>
-        </select>
-        <select class="filter-select" id="providerFilter" onchange="applyFilters()" style="display:none"><option value="">All Providers</option></select>
-      </div>
-      <div id="table-container"></div>
-      <div class="pager">
-        <span id="pager-info"></span>
-        <div class="pager-btns">
-          <button class="pager-btn" id="btn-prev" onclick="changePage(-1)">&#8592; Prev</button>
-          <button class="pager-btn" id="btn-next" onclick="changePage(1)">Next &#8594;</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="sec"><h2>Device Table</h2>
+<div class="tw">
+<div class="tb">
+<div class="pills">
+<button class="pill active" onclick="showV('b',this)">Buildings</button>
+<button class="pill" onclick="showV('d',this)">All Devices</button>
 </div>
+<input class="sb" type="search" id="sq" placeholder="Search buildings, devices, providers..." oninput="applyF()">
+<select class="fs" id="tf" onchange="applyF()" style="display:none"><option value="">All Types</option><option value="door">Doors</option><option value="camera">Cameras</option></select>
+<select class="fs" id="sff" onchange="applyF()"><option value="">All Status</option><option value="online">Online</option><option value="offline">Offline</option><option value="low_battery">Low Battery</option></select>
+<select class="fs" id="pf2" onchange="applyF()" style="display:none"><option value="">All Providers</option></select>
+</div>
+<div id="tc2"></div>
+<div class="pg"><span id="pi"></span><div class="pgs"><button class="pb" id="bprev" onclick="chP(-1)">Prev</button><button class="pb" id="bnext" onclick="chP(1)">Next</button></div></div>
+</div></div></div>
 <script>
-// DATA — auto-generated, replace with fresh data from carson_devices.csv
-const STATS=window.STATS_DATA||{total:376,online:376,offline:0,low_battery:0,total_buildings:10,by_type:{door:343,camera:33},by_provider:{eagle_eye_v2:33,salto:0,two_n:14,brivo:10,smartair:121,dormakaba:197},last_updated:"Run generate_dashboard.py to update"};
-const BUILDINGS=window.BUILDINGS_DATA||[];
-const DEVICES=window.DEVICES_DATA||[];
-
-document.getElementById('s-total').textContent=STATS.total.toLocaleString();
-document.getElementById('s-online').textContent=STATS.online.toLocaleString();
-document.getElementById('s-offline').textContent=STATS.offline.toLocaleString();
-document.getElementById('s-battery').textContent=STATS.low_battery.toLocaleString();
-document.getElementById('s-buildings').textContent=STATS.total_buildings.toLocaleString();
-document.getElementById('last-updated').textContent='Last updated: '+STATS.last_updated;
-
-const COLORS=['#4f8ef7','#a855f7','#22c55e','#f59e0b','#ef4444','#06b6d4','#ec4899','#84cc16'];
-const chartDefaults={plugins:{legend:{labels:{color:'#8892a4',padding:16,font:{size:12}}}},maintainAspectRatio:false};
-
-new Chart(document.getElementById('typeChart'),{type:'doughnut',data:{labels:Object.keys(STATS.by_type).map(k=>k.charAt(0).toUpperCase()+k.slice(1)),datasets:[{data:Object.values(STATS.by_type),backgroundColor:COLORS,borderWidth:0,hoverOffset:6}]},options:{...chartDefaults,plugins:{legend:{position:'right',...chartDefaults.plugins.legend}},cutout:'65%'}});
-
-new Chart(document.getElementById('providerChart'),{type:'bar',data:{labels:Object.keys(STATS.by_provider).map(k=>k.replace(/_/g,' ')),datasets:[{data:Object.values(STATS.by_provider),backgroundColor:COLORS,borderRadius:6,borderWidth:0}]},options:{...chartDefaults,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8892a4',font:{size:11}},grid:{color:'#2e3350'},border:{display:false}},y:{ticks:{color:'#e2e8f0',font:{size:12}},grid:{display:false},border:{display:false}}}}});
-
-const pf=document.getElementById('providerFilter');
-[...new Set(DEVICES.map(d=>d.provider).filter(Boolean))].sort().forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p.replace(/_/g,' ');pf.appendChild(o);});
-
-let currentView='buildings',currentPage=1,filteredData=[],sortCol=null,sortDir=1;
-const PAGE_SIZE=25;
-
-function showView(v,btn){
-  currentView=v;currentPage=1;sortCol=null;
-  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('typeFilter').style.display=v==='buildings'?'none':'';
-  document.getElementById('providerFilter').style.display=v==='buildings'?'none':'';
-  applyFilters();
-}
-
-function applyFilters(){
-  const q=document.getElementById('searchBox').value.toLowerCase();
-  const tf=document.getElementById('typeFilter').value;
-  const sf=document.getElementById('statusFilter').value;
-  const pvf=document.getElementById('providerFilter').value;
-  if(currentView==='buildings'){
-    filteredData=BUILDINGS.filter(b=>{
-      if(q&&!b.name.toLowerCase().includes(q)&&!String(b.id).includes(q))return false;
-      if(sf==='offline'&&b.offline===0)return false;
-      if(sf==='online'&&b.online===0)return false;
-      if(sf==='low_battery'&&b.low_battery===0)return false;
-      return true;
-    });
-  }else{
-    filteredData=DEVICES.filter(d=>{
-      if(q&&!d.building_name.toLowerCase().includes(q)&&!d.device_name.toLowerCase().includes(q)&&!(d.provider||'').toLowerCase().includes(q))return false;
-      if(tf&&d.device_type!==tf)return false;
-      if(sf==='offline'&&(d.available||'').toUpperCase()==='TRUE')return false;
-      if(sf==='online'&&(d.available||'').toUpperCase()!=='TRUE')return false;
-      if(sf==='low_battery'&&(d.low_battery||'').toUpperCase()!=='TRUE')return false;
-      if(pvf&&d.provider!==pvf)return false;
-      return true;
-    });
-  }
-  if(sortCol!==null)sortData();
-  currentPage=1;
-  renderTable();
-}
-
-function sortData(){
-  filteredData.sort((a,b)=>{
-    let av=a[sortCol],bv=b[sortCol];
-    if(!isNaN(av)&&!isNaN(bv)){av=+av;bv=+bv;}else{av=String(av||'').toLowerCase();bv=String(bv||'').toLowerCase();}
-    return av<bv?-sortDir:av>bv?sortDir:0;
-  });
-}
-
-function changePage(d){
-  const maxPage=Math.ceil(filteredData.length/PAGE_SIZE);
-  currentPage=Math.max(1,Math.min(maxPage,currentPage+d));
-  renderTable();
-}
-
-function sortBy(col){
-  if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}
-  sortData();renderTable();
-}
-
-function bool(v){return v&&v.toUpperCase()==='TRUE';}
-
-function th(label,key){
-  const sorted=sortCol===key;
-  return '<th onclick="sortBy(''+key+'')" class="'+(sorted?'sorted':'')+'">'
-    +label+' <span style="opacity:'+(sorted?1:.4)+';margin-left:4px;color:'+(sorted?'var(--accent)':'inherit')+'">'
-    +(sorted?(sortDir>0?'↑':'↓'):'↕')+'</span></th>';
-}
-
-function renderTable(){
-  const start=(currentPage-1)*PAGE_SIZE;
-  const page=filteredData.slice(start,start+PAGE_SIZE);
-  const total=filteredData.length;
-  const maxPage=Math.max(1,Math.ceil(total/PAGE_SIZE));
-  document.getElementById('pager-info').textContent='Showing '+(start+1)+'-'+Math.min(start+PAGE_SIZE,total)+' of '+total;
-  document.getElementById('btn-prev').disabled=currentPage<=1;
-  document.getElementById('btn-next').disabled=currentPage>=maxPage;
-
-  let headers,rows;
-  if(currentView==='buildings'){
-    headers=[['Building Name','name'],['Building ID','id'],['Total','total'],['Doors','doors'],['Cameras','cameras'],['Online','online'],['Offline','offline'],['Low Battery','low_battery']].map(([l,k])=>th(l,k)).join('');
-    rows=page.map(b=>{
-      const cls=b.low_battery>0?' class="battery-row"':b.offline>0?' class="offline-row"':'';
-      return '<tr'+cls+'><td style="font-weight:500">'+b.name+'</td><td style="color:var(--muted)">'+b.id+'</td><td>'+b.total+'</td>'
-        +'<td><span class="badge badge-door">'+b.doors+'</span></td>'
-        +'<td><span class="badge badge-camera">'+b.cameras+'</span></td>'
-        +'<td><span class="badge badge-online"><span class="dot dot-green"></span>'+b.online+'</span></td>'
-        +'<td>'+(b.offline>0?'<span class="badge badge-offline">'+b.offline+'</span>':'<span style="color:var(--muted)">0</span>')+'</td>'
-        +'<td>'+(b.low_battery>0?'<span class="badge badge-low">'+b.low_battery+'</span>':'<span style="color:var(--muted)">0</span>')+'</td></tr>';
-    }).join('');
-  }else{
-    headers=[['Building','building_name'],['Device','device_name'],['Type','device_type'],['Subtype','device_subtype'],['Provider','provider'],['Method','opening_method'],['Status','available'],['Active','is_active'],['Disabled','disabled'],['Battery','low_battery'],['Device ID','device_id']].map(([l,k])=>th(l,k)).join('');
-    rows=page.map(d=>{
-      const online=bool(d.available),lowbat=bool(d.low_battery);
-      const cls=lowbat?' class="battery-row"':!online?' class="offline-row"':'';
-      return '<tr'+cls+'>'
-        +'<td style="font-weight:500;max-width:150px;overflow:hidden;text-overflow:ellipsis">'+d.building_name+'</td>'
-        +'<td style="max-width:160px;overflow:hidden;text-overflow:ellipsis">'+d.device_name+'</td>'
-        +'<td>'+(d.device_type==='door'?'<span class="badge badge-door">door</span>':'<span class="badge badge-camera">camera</span>')+'</td>'
-        +'<td style="color:var(--muted);font-size:12px">'+(d.device_subtype||'—')+'</td>'
-        +'<td><span class="provider-pill">'+((d.provider||'—').replace(/_/g,' '))+'</span></td>'
-        +'<td style="color:var(--muted);font-size:12px">'+(d.opening_method||'—')+'</td>'
-        +'<td>'+(online?'<span class="badge badge-online"><span class="dot dot-green"></span>Online</span>':'<span class="badge badge-offline">Offline</span>')+'</td>'
-        +'<td class="'+(bool(d.is_active)?'bool-true':'bool-false')+'">'+(bool(d.is_active)?'✓':'—')+'</td>'
-        +'<td class="'+(bool(d.disabled)?'bool-false':'bool-true')+'">'+(bool(d.disabled)?'Yes':'—')+'</td>'
-        +'<td>'+(lowbat?'<span class="badge badge-low">Low</span>':'<span style="color:var(--muted)">—</span>')+'</td>'
-        +'<td style="color:var(--muted);font-size:12px">'+d.device_id+'</td></tr>';
-    }).join('');
-  }
-  document.getElementById('table-container').innerHTML='<table><thead><tr>'+headers+'</tr></thead><tbody>'+rows+'</tbody></table>';
-}
-
-applyFilters();
+var ST={total:376,online:376,offline:0,low_battery:0,total_buildings:10,by_type:{door:343,camera:33},by_provider:{eagle_eye_v2:33,salto:0,two_n:14,brivo:10,smartair:121,dormakaba:197},last_updated:"Run generate_dashboard.py to refresh"};
+var BL=window.BUILDINGS_DATA||[];
+var DV=window.DEVICES_DATA||[];
+document.getElementById("s0").textContent=ST.total.toLocaleString();
+document.getElementById("s1").textContent=ST.online.toLocaleString();
+document.getElementById("s2").textContent=ST.offline.toLocaleString();
+document.getElementById("s3").textContent=ST.low_battery.toLocaleString();
+document.getElementById("s4").textContent=ST.total_buildings.toLocaleString();
+document.getElementById("ts").textContent="Last updated: "+ST.last_updated;
+var C=["#4f8ef7","#a855f7","#22c55e","#f59e0b","#ef4444","#06b6d4","#ec4899","#84cc16"];
+new Chart(document.getElementById("tc"),{type:"doughnut",data:{labels:Object.keys(ST.by_type).map(function(k){return k.charAt(0).toUpperCase()+k.slice(1);}),datasets:[{data:Object.values(ST.by_type),backgroundColor:C,borderWidth:0,hoverOffset:6}]},options:{plugins:{legend:{position:"right",labels:{color:"#8892a4",padding:16,font:{size:12}}}},cutout:"65%",maintainAspectRatio:false}});
+new Chart(document.getElementById("pcc"),{type:"bar",data:{labels:Object.keys(ST.by_provider).map(function(k){return k.replace(/_/g," ");}),datasets:[{data:Object.values(ST.by_provider),backgroundColor:C,borderRadius:6,borderWidth:0}]},options:{indexAxis:"y",plugins:{legend:{display:false}},scales:{x:{ticks:{color:"#8892a4",font:{size:11}},grid:{color:"#2e3350"},border:{display:false}},y:{ticks:{color:"#e2e8f0",font:{size:12}},grid:{display:false},border:{display:false}}},maintainAspectRatio:false}});
+var pf=document.getElementById("pf2");
+var providers=[...new Set(DV.map(function(d){return d.provider;}).filter(Boolean))].sort();
+providers.forEach(function(p){var o=document.createElement("option");o.value=p;o.textContent=p.replace(/_/g," ");pf.appendChild(o);});
+var curV="b",curP=1,fd=[],sc=null,sd=1,PS=25;
+function showV(v,btn){curV=v;curP=1;sc=null;document.querySelectorAll(".pill").forEach(function(p){p.classList.remove("active");});btn.classList.add("active");document.getElementById("tf").style.display=v==="b"?"none":"";document.getElementById("pf2").style.display=v==="b"?"none":"";applyF();}
+function applyF(){var q=document.getElementById("sq").value.toLowerCase();var tf=document.getElementById("tf").value;var sf=document.getElementById("sff").value;var pf=document.getElementById("pf2").value;if(curV==="b"){fd=BL.filter(function(b){if(q&&b.name.toLowerCase().indexOf(q)<0&&String(b.id).indexOf(q)<0)return false;if(sf==="offline"&&b.offline===0)return false;if(sf==="online"&&b.online===0)return false;if(sf==="low_battery"&&b.low_battery===0)return false;return true;});}else{fd=DV.filter(function(d){if(q&&d.building_name.toLowerCase().indexOf(q)<0&&d.device_name.toLowerCase().indexOf(q)<0&&(d.provider||"").toLowerCase().indexOf(q)<0)return false;if(tf&&d.device_type!==tf)return false;if(sf==="offline"&&(d.available||"").toUpperCase()==="TRUE")return false;if(sf==="online"&&(d.available||"").toUpperCase()!=="TRUE")return false;if(sf==="low_battery"&&(d.low_battery||"").toUpperCase()!=="TRUE")return false;if(pf&&d.provider!==pf)return false;return true;});}if(sc!==null)sortD();curP=1;renderT();}
+function sortD(){fd.sort(function(a,b){var av=a[sc],bv=b[sc];if(!isNaN(av)&&!isNaN(bv)){av=+av;bv=+bv;}else{av=String(av||"").toLowerCase();bv=String(bv||"").toLowerCase();}return av<bv?-sd:av>bv?sd:0;});}
+function chP(d){var maxP=Math.ceil(fd.length/PS);curP=Math.max(1,Math.min(maxP,curP+d));renderT();}
+function sBy(col){if(sc===col)sd*=-1;else{sc=col;sd=1;}sortD();renderT();}
+function bl(v){return v&&v.toUpperCase()==="TRUE";}
+function mkTh(label,key){var sorted=sc===key;var arr=sorted?(sd>0?"&#8593;":"&#8595;"):"&#8597;";var h=document.createElement("th");h.setAttribute("data-key",key);h.onclick=function(){sBy(key);};if(sorted)h.className="sorted";h.innerHTML=label+" <span style='opacity:"+(sorted?1:.4)+";margin-left:4px;color:"+(sorted?"var(--accent)":"inherit")+"'>"+arr+"</span>";return h;}
+function renderT(){var start=(curP-1)*PS;var page=fd.slice(start,start+PS);var tot=fd.length;var maxP=Math.max(1,Math.ceil(tot/PS));document.getElementById("pi").textContent="Showing "+(start+1)+"-"+Math.min(start+PS,tot)+" of "+tot;document.getElementById("bprev").disabled=curP<=1;document.getElementById("bnext").disabled=curP>=maxP;var tbl=document.createElement("table");var thead=document.createElement("thead");var hrow=document.createElement("tr");var tbody=document.createElement("tbody");if(curV==="b"){[["Building Name","name"],["Building ID","id"],["Total","total"],["Doors","doors"],["Cameras","cameras"],["Online","online"],["Offline","offline"],["Low Battery","low_battery"]].forEach(function(c){hrow.appendChild(mkTh(c[0],c[1]));});page.forEach(function(b){var tr=document.createElement("tr");if(b.low_battery>0)tr.className="btr";else if(b.offline>0)tr.className="or";var cells=[document.createElement("td"),document.createElement("td"),document.createElement("td"),document.createElement("td"),document.createElement("td"),document.createElement("td"),document.createElement("td"),document.createElement("td")];cells[0].style.fontWeight="500";cells[0].textContent=b.name;cells[1].style.color="var(--muted)";cells[1].textContent=b.id;cells[2].textContent=b.total;cells[3].innerHTML="<span class='badge bd'>"+b.doors+"</span>";cells[4].innerHTML="<span class='badge bca'>"+b.cameras+"</span>";cells[5].innerHTML="<span class='badge bon'><span class='dot dg'></span>"+b.online+"</span>";cells[6].innerHTML=b.offline>0?"<span class='badge bof'>"+b.offline+"</span>":"<span style='color:var(--muted)'>0</span>";cells[7].innerHTML=b.low_battery>0?"<span class='badge bb'>"+b.low_battery+"</span>":"<span style='color:var(--muted)'>0</span>";cells.forEach(function(c){tr.appendChild(c);});tbody.appendChild(tr);});}else{[["Building","building_name"],["Device","device_name"],["Type","device_type"],["Subtype","device_subtype"],["Provider","provider"],["Method","opening_method"],["Status","available"],["Active","is_active"],["Disabled","disabled"],["Battery","low_battery"],["Device ID","device_id"]].forEach(function(c){hrow.appendChild(mkTh(c[0],c[1]));});page.forEach(function(d){var online=bl(d.available),lowbat=bl(d.low_battery);var tr=document.createElement("tr");if(lowbat)tr.className="btr";else if(!online)tr.className="or";var c0=document.createElement("td");c0.style.fontWeight="500";c0.style.maxWidth="150px";c0.style.overflow="hidden";c0.style.textOverflow="ellipsis";c0.textContent=d.building_name;var c1=document.createElement("td");c1.style.maxWidth="160px";c1.style.overflow="hidden";c1.style.textOverflow="ellipsis";c1.textContent=d.device_name;var c2=document.createElement("td");c2.innerHTML=d.device_type==="door"?"<span class='badge bd'>door</span>":"<span class='badge bca'>camera</span>";var c3=document.createElement("td");c3.style.color="var(--muted)";c3.style.fontSize="12px";c3.textContent=d.device_subtype||"-";var c4=document.createElement("td");c4.innerHTML="<span class='pp'>"+(d.provider||"-").replace(/_/g," ")+"</span>";var c5=document.createElement("td");c5.style.color="var(--muted)";c5.style.fontSize="12px";c5.textContent=d.opening_method||"-";var c6=document.createElement("td");c6.innerHTML=online?"<span class='badge bon'><span class='dot dg'></span>Online</span>":"<span class='badge bof'>Offline</span>";var c7=document.createElement("td");c7.className=bl(d.is_active)?"bt":"bf";c7.textContent=bl(d.is_active)?"v":"-";var c8=document.createElement("td");c8.className=bl(d.disabled)?"bf":"bt";c8.textContent=bl(d.disabled)?"Yes":"-";var c9=document.createElement("td");c9.innerHTML=lowbat?"<span class='badge bb'>Low</span>":"<span style='color:var(--muted)'>-</span>";var c10=document.createElement("td");c10.style.color="var(--muted)";c10.style.fontSize="12px";c10.textContent=d.device_id;[c0,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10].forEach(function(c){tr.appendChild(c);});tbody.appendChild(tr);});}thead.appendChild(hrow);tbl.appendChild(thead);tbl.appendChild(tbody);var container=document.getElementById("tc2");container.innerHTML="";container.appendChild(tbl);}
+applyF();
 </script>
 </body>
 </html>
