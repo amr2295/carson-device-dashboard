@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carson Device Status Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0f1117;--surface:#1a1d27;--card:#21253a;--border:#2e3350;--accent:#4f8ef7;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--purple:#a855f7;--text:#e2e8f0;--muted:#8892a4;--header:#c5cfe0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh}
+.top-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 32px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:20px;font-weight:700;color:var(--accent)}.logo span{color:var(--text)}
+.timestamp{font-size:12px;color:var(--muted)}
+.container{max-width:1400px;margin:0 auto;padding:24px 32px}
+h2{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px}
+.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:32px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:12px 12px 0 0}
+.stat-card.total::before{background:var(--accent)}.stat-card.online::before{background:var(--green)}
+.stat-card.offline::before{background:var(--red)}.stat-card.battery::before{background:var(--yellow)}
+.stat-card.buildings::before{background:var(--purple)}
+.stat-label{font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:500}
+.stat-value{font-size:36px;font-weight:700;line-height:1}
+.stat-card.total .stat-value{color:var(--accent)}.stat-card.online .stat-value{color:var(--green)}
+.stat-card.offline .stat-value{color:var(--red)}.stat-card.battery .stat-value{color:var(--yellow)}
+.stat-card.buildings .stat-value{color:var(--purple)}
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px}
+.chart-card h2{margin-bottom:16px}
+.chart-container{position:relative;height:220px}
+.section{margin-bottom:32px}
+.table-wrapper{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.table-toolbar{padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.search-box{flex:1;min-width:200px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--text);font-size:14px;outline:none}
+.search-box:focus{border-color:var(--accent)}
+.filter-select{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:13px;cursor:pointer}
+.tab-pills{display:flex;gap:4px}
+.pill{padding:7px 16px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all 0.15s}
+.pill.active{background:var(--accent);border-color:var(--accent);color:white}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--surface);padding:10px 14px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap;cursor:pointer;user-select:none}
+thead th:hover{color:var(--text)}
+tbody tr{border-bottom:1px solid var(--border);transition:background 0.1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(79,142,247,0.05)}
+tbody td{padding:10px 14px;white-space:nowrap}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-online{background:rgba(34,197,94,.15);color:var(--green)}.badge-offline{background:rgba(239,68,68,.15);color:var(--red)}
+.badge-door{background:rgba(79,142,247,.15);color:var(--accent)}.badge-camera{background:rgba(168,85,247,.15);color:var(--purple)}
+.badge-low{background:rgba(245,158,11,.15);color:var(--yellow)}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.dot-green{background:var(--green);box-shadow:0 0 6px var(--green)}.dot-red{background:var(--red)}
+.pager{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-top:1px solid var(--border);font-size:13px;color:var(--muted)}
+.pager-btns{display:flex;gap:6px}
+.pager-btn{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:5px 12px;color:var(--text);cursor:pointer;font-size:13px}
+.pager-btn:hover{border-color:var(--accent);color:var(--accent)}
+.pager-btn:disabled{opacity:.4;cursor:not-allowed}
+.provider-pill{font-size:11px;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 7px;color:var(--header)}
+.bool-true{color:var(--green);font-weight:600}.bool-false{color:var(--muted)}
+.offline-row{background:rgba(239,68,68,.04)}.battery-row{background:rgba(245,158,11,.04)}
+@media(max-width:900px){.stats-grid{grid-template-columns:repeat(2,1fr)}.charts-row{grid-template-columns:1fr}.container{padding:16px}}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="logo">Carson<span> Device Status</span></div>
+  <div class="timestamp" id="last-updated"></div>
+</div>
+<div class="container">
+  <div style="margin-bottom:20px;margin-top:8px">
+    <h2>Overview</h2>
+    <div class="stats-grid">
+      <div class="stat-card total"><div class="stat-label">Total Devices</div><div class="stat-value" id="s-total">—</div></div>
+      <div class="stat-card online"><div class="stat-label">Online</div><div class="stat-value" id="s-online">—</div></div>
+      <div class="stat-card offline"><div class="stat-label">Offline</div><div class="stat-value" id="s-offline">—</div></div>
+      <div class="stat-card battery"><div class="stat-label">Low Battery</div><div class="stat-value" id="s-battery">—</div></div>
+      <div class="stat-card buildings"><div class="stat-label">Buildings</div><div class="stat-value" id="s-buildings">—</div></div>
+    </div>
+  </div>
+  <div class="charts-row">
+    <div class="chart-card"><h2>By Device Type</h2><div class="chart-container"><canvas id="typeChart"></canvas></div></div>
+    <div class="chart-card"><h2>By Provider</h2><div class="chart-container"><canvas id="providerChart"></canvas></div></div>
+  </div>
+  <div class="section">
+    <h2>Device Table</h2>
+    <div class="table-wrapper">
+      <div class="table-toolbar">
+        <div class="tab-pills">
+          <button class="pill active" id="pill-buildings" onclick="showView('buildings',this)">Buildings</button>
+          <button class="pill" id="pill-devices" onclick="showView('devices',this)">All Devices</button>
+        </div>
+        <input class="search-box" type="search" id="searchBox" placeholder="Search buildings, devices, providers…" oninput="applyFilters()">
+        <select class="filter-select" id="typeFilter" onchange="applyFilters()" style="display:none">
+          <option value="">All Types</option><option value="door">Doors</option><option value="camera">Cameras</option>
+        </select>
+        <select class="filter-select" id="statusFilter" onchange="applyFilters()">
+          <option value="">All Status</option><option value="online">Online</option><option value="offline">Offline</option><option value="low_battery">Low Battery</option>
+        </select>
+        <select class="filter-select" id="providerFilter" onchange="applyFilters()" style="display:none"><option value="">All Providers</option></select>
+      </div>
+      <div id="table-container"></div>
+      <div class="pager">
+        <span id="pager-info"></span>
+        <div class="pager-btns">
+          <button class="pager-btn" id="btn-prev" onclick="changePage(-1)">&#8592; Prev</button>
+          <button class="pager-btn" id="btn-next" onclick="changePage(1)">Next &#8594;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+// DATA — auto-generated, replace with fresh data from carson_devices.csv
+const STATS=window.STATS_DATA||{total:376,online:376,offline:0,low_battery:0,total_buildings:10,by_type:{door:343,camera:33},by_provider:{eagle_eye_v2:33,salto:0,two_n:14,brivo:10,smartair:121,dormakaba:197},last_updated:"Run generate_dashboard.py to update"};
+const BUILDINGS=window.BUILDINGS_DATA||[];
+const DEVICES=window.DEVICES_DATA||[];
+
+document.getElementById('s-total').textContent=STATS.total.toLocaleString();
+document.getElementById('s-online').textContent=STATS.online.toLocaleString();
+document.getElementById('s-offline').textContent=STATS.offline.toLocaleString();
+document.getElementById('s-battery').textContent=STATS.low_battery.toLocaleString();
+document.getElementById('s-buildings').textContent=STATS.total_buildings.toLocaleString();
+document.getElementById('last-updated').textContent='Last updated: '+STATS.last_updated;
+
+const COLORS=['#4f8ef7','#a855f7','#22c55e','#f59e0b','#ef4444','#06b6d4','#ec4899','#84cc16'];
+const chartDefaults={plugins:{legend:{labels:{color:'#8892a4',padding:16,font:{size:12}}}},maintainAspectRatio:false};
+
+new Chart(document.getElementById('typeChart'),{type:'doughnut',data:{labels:Object.keys(STATS.by_type).map(k=>k.charAt(0).toUpperCase()+k.slice(1)),datasets:[{data:Object.values(STATS.by_type),backgroundColor:COLORS,borderWidth:0,hoverOffset:6}]},options:{...chartDefaults,plugins:{legend:{position:'right',...chartDefaults.plugins.legend}},cutout:'65%'}});
+
+new Chart(document.getElementById('providerChart'),{type:'bar',data:{labels:Object.keys(STATS.by_provider).map(k=>k.replace(/_/g,' ')),datasets:[{data:Object.values(STATS.by_provider),backgroundColor:COLORS,borderRadius:6,borderWidth:0}]},options:{...chartDefaults,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8892a4',font:{size:11}},grid:{color:'#2e3350'},border:{display:false}},y:{ticks:{color:'#e2e8f0',font:{size:12}},grid:{display:false},border:{display:false}}}}});
+
+const pf=document.getElementById('providerFilter');
+[...new Set(DEVICES.map(d=>d.provider).filter(Boolean))].sort().forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p.replace(/_/g,' ');pf.appendChild(o);});
+
+let currentView='buildings',currentPage=1,filteredData=[],sortCol=null,sortDir=1;
+const PAGE_SIZE=25;
+
+function showView(v,btn){
+  currentView=v;currentPage=1;sortCol=null;
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('typeFilter').style.display=v==='buildings'?'none':'';
+  document.getElementById('providerFilter').style.display=v==='buildings'?'none':'';
+  applyFilters();
+}
+
+function applyFilters(){
+  const q=document.getElementById('searchBox').value.toLowerCase();
+  const tf=document.getElementById('typeFilter').value;
+  const sf=document.getElementById('statusFilter').value;
+  const pvf=document.getElementById('providerFilter').value;
+  if(currentView==='buildings'){
+    filteredData=BUILDINGS.filter(b=>{
+      if(q&&!b.name.toLowerCase().includes(q)&&!String(b.id).includes(q))return false;
+      if(sf==='offline'&&b.offline===0)return false;
+      if(sf==='online'&&b.online===0)return false;
+      if(sf==='low_battery'&&b.low_battery===0)return false;
+      return true;
+    });
+  }else{
+    filteredData=DEVICES.filter(d=>{
+      if(q&&!d.building_name.toLowerCase().includes(q)&&!d.device_name.toLowerCase().includes(q)&&!(d.provider||'').toLowerCase().includes(q))return false;
+      if(tf&&d.device_type!==tf)return false;
+      if(sf==='offline'&&(d.available||'').toUpperCase()==='TRUE')return false;
+      if(sf==='online'&&(d.available||'').toUpperCase()!=='TRUE')return false;
+      if(sf==='low_battery'&&(d.low_battery||'').toUpperCase()!=='TRUE')return false;
+      if(pvf&&d.provider!==pvf)return false;
+      return true;
+    });
+  }
+  if(sortCol!==null)sortData();
+  currentPage=1;
+  renderTable();
+}
+
+function sortData(){
+  filteredData.sort((a,b)=>{
+    let av=a[sortCol],bv=b[sortCol];
+    if(!isNaN(av)&&!isNaN(bv)){av=+av;bv=+bv;}else{av=String(av||'').toLowerCase();bv=String(bv||'').toLowerCase();}
+    return av<bv?-sortDir:av>bv?sortDir:0;
+  });
+}
+
+function changePage(d){
+  const maxPage=Math.ceil(filteredData.length/PAGE_SIZE);
+  currentPage=Math.max(1,Math.min(maxPage,currentPage+d));
+  renderTable();
+}
+
+function sortBy(col){
+  if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1;}
+  sortData();renderTable();
+}
+
+function bool(v){return v&&v.toUpperCase()==='TRUE';}
+
+function th(label,key){
+  const sorted=sortCol===key;
+  return '<th onclick="sortBy(''+key+'')" class="'+(sorted?'sorted':'')+'">'
+    +label+' <span style="opacity:'+(sorted?1:.4)+';margin-left:4px;color:'+(sorted?'var(--accent)':'inherit')+'">'
+    +(sorted?(sortDir>0?'↑':'↓'):'↕')+'</span></th>';
+}
+
+function renderTable(){
+  const start=(currentPage-1)*PAGE_SIZE;
+  const page=filteredData.slice(start,start+PAGE_SIZE);
+  const total=filteredData.length;
+  const maxPage=Math.max(1,Math.ceil(total/PAGE_SIZE));
+  document.getElementById('pager-info').textContent='Showing '+(start+1)+'-'+Math.min(start+PAGE_SIZE,total)+' of '+total;
+  document.getElementById('btn-prev').disabled=currentPage<=1;
+  document.getElementById('btn-next').disabled=currentPage>=maxPage;
+
+  let headers,rows;
+  if(currentView==='buildings'){
+    headers=[['Building Name','name'],['Building ID','id'],['Total','total'],['Doors','doors'],['Cameras','cameras'],['Online','online'],['Offline','offline'],['Low Battery','low_battery']].map(([l,k])=>th(l,k)).join('');
+    rows=page.map(b=>{
+      const cls=b.low_battery>0?' class="battery-row"':b.offline>0?' class="offline-row"':'';
+      return '<tr'+cls+'><td style="font-weight:500">'+b.name+'</td><td style="color:var(--muted)">'+b.id+'</td><td>'+b.total+'</td>'
+        +'<td><span class="badge badge-door">'+b.doors+'</span></td>'
+        +'<td><span class="badge badge-camera">'+b.cameras+'</span></td>'
+        +'<td><span class="badge badge-online"><span class="dot dot-green"></span>'+b.online+'</span></td>'
+        +'<td>'+(b.offline>0?'<span class="badge badge-offline">'+b.offline+'</span>':'<span style="color:var(--muted)">0</span>')+'</td>'
+        +'<td>'+(b.low_battery>0?'<span class="badge badge-low">'+b.low_battery+'</span>':'<span style="color:var(--muted)">0</span>')+'</td></tr>';
+    }).join('');
+  }else{
+    headers=[['Building','building_name'],['Device','device_name'],['Type','device_type'],['Subtype','device_subtype'],['Provider','provider'],['Method','opening_method'],['Status','available'],['Active','is_active'],['Disabled','disabled'],['Battery','low_battery'],['Device ID','device_id']].map(([l,k])=>th(l,k)).join('');
+    rows=page.map(d=>{
+      const online=bool(d.available),lowbat=bool(d.low_battery);
+      const cls=lowbat?' class="battery-row"':!online?' class="offline-row"':'';
+      return '<tr'+cls+'>'
+        +'<td style="font-weight:500;max-width:150px;overflow:hidden;text-overflow:ellipsis">'+d.building_name+'</td>'
+        +'<td style="max-width:160px;overflow:hidden;text-overflow:ellipsis">'+d.device_name+'</td>'
+        +'<td>'+(d.device_type==='door'?'<span class="badge badge-door">door</span>':'<span class="badge badge-camera">camera</span>')+'</td>'
+        +'<td style="color:var(--muted);font-size:12px">'+(d.device_subtype||'—')+'</td>'
+        +'<td><span class="provider-pill">'+((d.provider||'—').replace(/_/g,' '))+'</span></td>'
+        +'<td style="color:var(--muted);font-size:12px">'+(d.opening_method||'—')+'</td>'
+        +'<td>'+(online?'<span class="badge badge-online"><span class="dot dot-green"></span>Online</span>':'<span class="badge badge-offline">Offline</span>')+'</td>'
+        +'<td class="'+(bool(d.is_active)?'bool-true':'bool-false')+'">'+(bool(d.is_active)?'✓':'—')+'</td>'
+        +'<td class="'+(bool(d.disabled)?'bool-false':'bool-true')+'">'+(bool(d.disabled)?'Yes':'—')+'</td>'
+        +'<td>'+(lowbat?'<span class="badge badge-low">Low</span>':'<span style="color:var(--muted)">—</span>')+'</td>'
+        +'<td style="color:var(--muted);font-size:12px">'+d.device_id+'</td></tr>';
+    }).join('');
+  }
+  document.getElementById('table-container').innerHTML='<table><thead><tr>'+headers+'</tr></thead><tbody>'+rows+'</tbody></table>';
+}
+
+applyFilters();
+</script>
+</body>
+</html>
