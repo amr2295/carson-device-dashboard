@@ -1,4 +1,4 @@
-——————↑↓↕–———✓———<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -195,84 +195,84 @@
     <nav class="topbar">
         <div class="logo">
               <div class="logo-icon">
-                      <svg viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1.2"/><rect x="9" y="1" width="6" height="6" rx="1.2"/><rect x="1" y="9" width="6" height="6" rx="1.2"/><rect x="9" y="9" width="6" height="6" rx="1.2"/></svg>svg>
-              </div>div>
+                      <svg viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1.2"/><rect x="9" y="1" width="6" height="6" rx="1.2"/><rect x="1" y="9" width="6" height="6" rx="1.2"/><rect x="9" y="9" width="6" height="6" rx="1.2"/></svg>
+              </div>
               carson
-              <span class="logo-tag">Device Status</span>span>
-        </div>div>
-        <span class="updated" id="ts">Last updated: —</span>span>
-    </nav>nav>
+              <span class="logo-tag">Device Status</span>
+        </div>
+        <span class="updated" id="ts">Last updated: —</span>
+    </nav>
 
     <div class="page">
 
-        <div class="sec-title">Overview</div>div>
+        <div class="sec-title">Overview</div>
         <div class="stats">
               <div class="stat">
-                      <div class="stat-label"><span class="dot dot-dark"></span>span>Total Devices</div>div>
-                      <div class="stat-val c-dark" id="s0">—</div>div>
-              </div>div>
+                      <div class="stat-label"><span class="dot dot-dark"></span>Total Devices</div>
+                      <div class="stat-val c-dark" id="s0">—</div>
+              </div>
               <div class="stat">
-                      <div class="stat-label"><span class="dot dot-green"></span>span>Online</div>div>
-                      <div class="stat-val c-green" id="s1">—</div>div>
-              </div>div>
+                      <div class="stat-label"><span class="dot dot-green"></span>Online</div>
+                      <div class="stat-val c-green" id="s1">—</div>
+              </div>
               <div class="stat">
-                      <div class="stat-label"><span class="dot dot-red"></span>span>Offline</div>div>
-                      <div class="stat-val c-red" id="s2">—</div>div>
-              </div>div>
+                      <div class="stat-label"><span class="dot dot-red"></span>Offline</div>
+                      <div class="stat-val c-red" id="s2">—</div>
+              </div>
               <div class="stat">
-                      <div class="stat-label"><span class="dot dot-warn"></span>span>Low Battery</div>div>
-                      <div class="stat-val c-warn" id="s3">—</div>div>
-              </div>div>
+                      <div class="stat-label"><span class="dot dot-warn"></span>Low Battery</div>
+                      <div class="stat-val c-warn" id="s3">—</div>
+              </div>
               <div class="stat">
-                      <div class="stat-label"><span class="dot dot-blue"></span>span>Buildings</div>div>
-                      <div class="stat-val c-blue" id="s4">—</div>div>
-              </div>div>
-        </div>div>
+                      <div class="stat-label"><span class="dot dot-blue"></span>Buildings</div>
+                      <div class="stat-val c-blue" id="s4">—</div>
+              </div>
+        </div>
 
         <div class="charts">
               <div class="chart-card">
-                      <div class="sec-title">By Device Type</div>div>
-                      <div class="chart-wrap"><canvas id="tc"></canvas>canvas></div>div>
-              </div>div>
+                      <div class="sec-title">By Device Type</div>
+                      <div class="chart-wrap"><canvas id="tc"></canvas></div>
+              </div>
               <div class="chart-card">
-                      <div class="sec-title">By Provider</div>div>
-                      <div class="chart-wrap"><canvas id="pcc"></canvas>canvas></div>div>
-              </div>div>
-        </div>div>
+                      <div class="sec-title">By Provider</div>
+                      <div class="chart-wrap"><canvas id="pcc"></canvas></div>
+              </div>
+        </div>
 
-        <div class="sec-title">Device Table</div>div>
+        <div class="sec-title">Device Table</div>
         <div class="table-card">
               <div class="toolbar">
-                      <button class="pill active" onclick="showV('b',this)">Buildings</button>button>
-                      <button class="pill" onclick="showV('d',this)">All Devices</button>button>
+                      <button class="pill active" onclick="showV('b',this)">Buildings</button>
+                      <button class="pill" onclick="showV('d',this)">All Devices</button>
                       <div class="search-box">
-                                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>svg>
+                                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                                 <input id="sq" type="text" placeholder="Search..." oninput="applyF()">
-                      </div>div>
+                      </div>
                       <select class="fsel" id="sff" onchange="applyF()">
-                                <option value="">All Status</option>option>
-                                <option value="online">Online</option>option>
-                                <option value="offline">Offline</option>option>
-                                <option value="low_battery">Low Battery</option>option>
-                      </select>select>
+                                <option value="">All Status</option>
+                                <option value="online">Online</option>
+                                <option value="offline">Offline</option>
+                                <option value="low_battery">Low Battery</option>
+                      </select>
                       <select class="fsel" id="tf" style="display:none" onchange="applyF()">
-                                <option value="">All Types</option>option>
-                                <option value="door">Doors</option>option>
-                                <option value="camera">Cameras</option>option>
-                      </select>select>
-                      <select class="fsel" id="pf2" style="display:none" onchange="applyF()"></select>select>
-              </div>div>
-              <div class="tbl-wrap" id="tc2"></div>div>
+                                <option value="">All Types</option>
+                                <option value="door">Doors</option>
+                                <option value="camera">Cameras</option>
+                      </select>
+                      <select class="fsel" id="pf2" style="display:none" onchange="applyF()"></select>
+              </div>
+              <div class="tbl-wrap" id="tc2"></div>
               <div class="pagination">
-                      <span class="pinfo" id="pi">Showing 0 of 0</span>span>
+                      <span class="pinfo" id="pi">Showing 0 of 0</span>
                       <div class="pbtn">
-                                <button id="bprev" onclick="chP(-1)" disabled>Prev</button>button>
-                                <button id="bnext" onclick="chP(1)" disabled>Next</button>button>
-                      </div>div>
-              </div>div>
-        </div>div>
+                                <button id="bprev" onclick="chP(-1)" disabled>Prev</button>
+                                <button id="bnext" onclick="chP(1)" disabled>Next</button>
+                      </div>
+              </div>
+        </div>
 
-    </div>div>
+    </div>
 
     <script>
       var ST={total:376,online:376,offline:0,low_battery:0,total_buildings:10,by_type:{door:343,camera:33},by_provider:{eagle_eye_v2:33,salto:0,two_n:14,brivo:10,smartair:121,dormakaba:197},last_updated:"Run generate_dashboard.py to refresh"};
